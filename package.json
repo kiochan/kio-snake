@@ -1,0 +1,17 @@
+{
+  "name": "kio-snake",
+  "version": "1.0.0",
+  "description": "a simple snake game based on electron",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "minigame"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "coffee-script": "^1.12.6"
+  }
+}
