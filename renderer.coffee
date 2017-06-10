@@ -3,6 +3,18 @@ canvas.width = "400"
 canvas.height = "300"
 document.body.appendChild canvas
 
+audioCtx = new window.AudioContext
+audioSrc = do audioCtx.createOscillator
+gain = do audioCtx.createGain
+
+audioSrc.type = "square"
+audioSrc.frequency.value = 440
+gain.gain.value = 0
+
+audioSrc.connect gain
+gain.connect audioCtx.destination
+audioSrc.start()
+
 context = canvas.getContext "2d"
 
 speed = 60
@@ -31,6 +43,12 @@ spawnSnack = ->
   return
 
 spawnFood = ->
+  audioSrc.type = "square"
+  audioSrc.frequency.value = 800
+  gain.gain.value = 0.01
+  setTimeout ->
+    gain.gain.value = 0
+  , 300
   x = ~~((do Math.random)*40)
   y = ~~((do Math.random)*30)
   while hit x, y
@@ -50,6 +68,12 @@ hit = (x, y) ->
   return res
 
 moveSnack = ->
+  audioSrc.type = "square"
+  audioSrc.frequency.value = 100
+  gain.gain.value = 0.01
+  setTimeout ->
+    gain.gain.value = 0
+  , 30
 
   position[0] += direction[0]
   if 0 > position[0]
@@ -113,21 +137,34 @@ render = (t) ->
     do moveSnack
   window.requestAnimationFrame render
 
+t = -1
+keysound = ->
+    audioSrc.type = "sawtooth"
+    clearTimeout t
+    audioSrc.frequency.value = 1200
+    gain.gain.value = 0.01
+    t = setTimeout ->
+      gain.gain.value = 0
+    , 10
 
 document.body.onkeydown = (e) ->
   switch e.keyCode
     when 38
       if direction[1] == 0
         direction = [0, -1]
+        do keysound
     when 39
       if direction[0] == 0
         direction = [1, 0]
+        do keysound
     when 40
       if direction[1] == 0
         direction = [0, 1]
+        do keysound
     when 37
       if direction[0] == 0
         direction = [-1, 0]
+        do keysound
   return
 
 do clearContext
